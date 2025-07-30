@@ -25,18 +25,20 @@ def openai_tarot(userName, cards, userQuestion, userInfo):
             "role": "system",
             "content": """
             Responde exclusivamente en formato JSON **válido**, sin agregar ```json ni ningún marcador de código.
-            Deberás actuar como un lector de tarot experto.
+            A)Deberás actuar como un lector de tarot experto.
+            B)Debes detectar automáticamente el idioma de la pregunta del user (`userQuestion`) y usar ese idioma en toda la respuesta.
+            C)Debes interpretar las cartas de tarot de user(`cards`) y responder a la pregunta del user(`userQuestion`) de manera empática y realista (120 palabras máximo por carta).
 
             ✅ Formato de respuesta requerido:
             {
-            "language": "Idioma detectado en la pregunta del usuario (userQuestion)",
             "cards": [
                 {
-                "nameCard": "Nombre de la carta",
-                "meaning": "Texto de entre 100 y 120 palabras con la interpretación de la carta relacionada a la pregunta del usuario(userQuestion). Sé empático y da predicciones reales.",
+                "nameCard": "Nombre de la carta 1",
+                "meaning": "Texto de entre 100 y 120 palabras con la interpretación de la carta relacionada a la pregunta del user (userQuestion). Sé empático y da predicciones reales.",
                 "qty": número de palabras en 'meaning'
                 },
-                {...}, {...} // Total 3 cartas
+                {...},
+                {...} //Total 3 cartas
             ],
             "resume": "Resumen de entre 180 y 240 palabras que analiza las 3 cartas combinadas. No repitas exactamente lo dicho en cada carta, haz una conclusión con tono realista y empático."
             }
@@ -51,20 +53,21 @@ def openai_tarot(userName, cards, userQuestion, userInfo):
         },
         {
             "role": "user",
-            "content": str({
-                "userName": userName,
-                "cards": cards,
-                "userQuestion": userQuestion,
-                "userInfo": userInfo
-            })
+            "content": str(f"""
+                userName: {userName} \n
+                cards: {cards} \n
+                userQuestion: {userQuestion} \n
+                userInfo: {userInfo}
+            """)
         }
     ]
+    print("Messages prepared:", messages)
     response = client.chat.completions.create(
-        model="gpt-4.1-nano",
+        model="gpt-4.1-mini",
         #response_format="json",
         messages=messages
     )
-    print(response,"\n\n",response.choices[0].message.content)
+    print("\n",response.choices[0].message.content)
 
     content = json.loads(response.choices[0].message.content)
     return content
