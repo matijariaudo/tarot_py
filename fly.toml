@@ -1,0 +1,5 @@
+[build]
+  builder = "paketobuildpacks/builder:base"
+  
+[build.args]
+  BP_PYTHON_VERSION = "3.12"
