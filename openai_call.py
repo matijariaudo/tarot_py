@@ -24,15 +24,16 @@ def openai_tarot(userName, cards, userQuestion, userInfo):
         {
             "role": "system",
             "content": """
-            Actúa como un lector de tarot experto. Responde exclusivamente en formato JSON **válido**, sin agregar ```json ni ningún marcador de código.
+            Responde exclusivamente en formato JSON **válido**, sin agregar ```json ni ningún marcador de código.
+            Deberás actuar como un lector de tarot experto.
 
             ✅ Formato de respuesta requerido:
             {
-            "language": "Idioma detectado en la pregunta del usuario",
+            "language": "Idioma detectado en la pregunta del usuario (userQuestion)",
             "cards": [
                 {
                 "nameCard": "Nombre de la carta",
-                "meaning": "Texto de entre 100 y 120 palabras con la interpretación de la carta relacionada a la pregunta del usuario. Sé empático y da predicciones reales.",
+                "meaning": "Texto de entre 100 y 120 palabras con la interpretación de la carta relacionada a la pregunta del usuario(userQuestion). Sé empático y da predicciones reales.",
                 "qty": número de palabras en 'meaning'
                 },
                 {...}, {...} // Total 3 cartas
@@ -45,7 +46,7 @@ def openai_tarot(userName, cards, userQuestion, userInfo):
             - No uses comillas triples, ni bloques tipo ```json. Solo responde el objeto JSON directamente.
             - Asegúrate de que todas las comas y llaves estén bien cerradas.
             - No uses comentarios dentro del JSON.
-            - Respeta el idioma detectado en la pregunta.
+            - Respeta el idioma detectado en la pregunta(userQuestion).
             """
         },
         {
