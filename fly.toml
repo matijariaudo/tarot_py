@@ -1,4 +1,4 @@
-app = "tu-app-name"
+app = "tarot-py"
 primary_region = "mia"
 
 [build]
