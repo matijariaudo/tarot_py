@@ -1,445 +1,105 @@
-<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#9780C4">
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playwrite+HU:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Tarot AI</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#807da6">
+<title>TarotGPT · Ask the cards</title>
+<meta name="description" content="Ask a question, choose your cards, and explore your personal tarot reading.">
+<link rel="stylesheet" href="/static/assets/bootstrap.min.css"><link rel="stylesheet" href="/static/assets/fonts.css">
 <style>
-    .card-container {
-        display: flex;
-        height: 130px;
-    }
+:root{--paper:#807da6;--ink:#3e3549;--muted:#867d8d;--purple:#8a70a7;--purple-dark:#71588e;--line:#e6deea;--serif:Georgia,'Times New Roman',serif}*{box-sizing:border-box}html{min-height:100%;scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:14px 'DM Sans',sans-serif;min-height:100svh}button,a,input,textarea{ -webkit-tap-highlight-color:transparent}button,a{touch-action:manipulation}button:focus-visible,a:focus-visible{outline:3px solid #b49bc8;outline-offset:5px}::selection{background:#e7daef}a{color:inherit;text-decoration:none}button{font:inherit}[hidden]{display:none!important}
+.atmosphere{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 10%,#fffefa66,transparent 60%)}.cloud{position:absolute;border-radius:50%;filter:blur(65px);animation:cloud 23s ease-in-out infinite alternate;opacity:.8}.cloud.one{width:750px;height:750px;top:-240px;left:-270px;background:radial-gradient(ellipse,#e6dbee,transparent 68%)}.cloud.two{width:850px;height:850px;right:-360px;top:0;background:radial-gradient(ellipse,#eee0d4,transparent 68%);animation-delay:-9s}.cloud.three{width:700px;height:700px;left:20%;bottom:-480px;background:radial-gradient(ellipse,#dce6d8,transparent 68%);animation-delay:-15s}@keyframes cloud{to{transform:translate(100px,90px) scale(1.25)}}
+.site-header{max-width:1320px;height:94px;margin:auto;padding:0 42px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ded7e17a}.brand{display:flex;align-items:center;gap:10px;font:29px var(--serif);letter-spacing:-1.1px}.brand b{font-weight:normal;color:var(--purple)}.brand-mark{font-size:34px;color:var(--purple);line-height:1}.header-caption{font-size:9px;letter-spacing:2px;color:var(--muted)}.motion-toggle{border:1px solid #ded5e3;background:#ffffff48;border-radius:30px;padding:8px 13px;color:#7d7087;font-size:10px;display:flex;align-items:center;gap:7px}.motion-dot{width:5px;height:5px;background:#9aab93;border-radius:50%}.paused .motion-dot{background:#aaa}.stepper{display:flex;justify-content:center;align-items:center;max-width:460px;margin:32px auto 0;padding:0 15px;gap:15px}.step{display:flex;align-items:center;gap:8px;color:#aaa1ad;font-size:10px;white-space:nowrap}.step .number{display:grid;place-items:center;width:23px;height:23px;border:1px solid #dbd2df;border-radius:50%;font-size:9px}.step.current{color:var(--purple-dark)}.current .number{background:#ede4f3;border-color:#bba6cc;color:var(--purple-dark)}.step.done .number{background:#e8ece1;border-color:#c6d1bb;color:#7b896b}.step-line{height:1px;flex:1;background:#ded6e3;max-width:38px}
+.app-main{position:relative;max-width:640px;margin:auto;padding:0 36px 30px}.screen{animation:enter .5s ease;position:relative}.screen-heading{text-align:center}.eyebrow{font-size:9px;font-weight:600;letter-spacing:2.5px;color:#9b87ad;text-transform:uppercase}.screen h1{font:normal 44px/1.16 var(--serif);letter-spacing:-1.5px;margin:13px 0}.screen h1 em{color:var(--purple);font-weight:normal}.subtitle{font-size:12px;color:var(--muted);line-height:1.9;margin:0 auto;max-width:390px}.illustration{position:relative;display:grid;place-items:center;height:183px;margin:6px auto 0;width:250px}.illustration>svg{width:210px;height:170px;animation:levitate 6s ease-in-out infinite}.illustration:before{content:'✧';position:absolute;left:4px;top:48px;color:#b8a6c6;font-size:27px;animation:shimmer 4s ease-in-out infinite}.illustration:after{content:'✦';position:absolute;right:10px;top:96px;color:#c4b39e;font-size:15px;animation:shimmer 5s ease-in-out infinite -2s}@keyframes levitate{50%{transform:translateY(-9px)}}@keyframes shimmer{50%{opacity:.3;transform:scale(.8)}}@keyframes enter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.question-form{max-width:410px;margin:27px auto 0}.form-label{font-size:11px;color:#6b5d77;margin-bottom:8px;display:flex;justify-content:space-between}.form-label small{font-size:9px;color:#a096a7}.form-control,.form-select{background:#fff9;border:1px solid #ded5e3;color:var(--ink);border-radius:7px;font-size:12px;padding:13px 15px;box-shadow:0 2px 5px #7d688203}.form-control::placeholder{color:#b0a6b6}.form-control:focus,.form-select:focus{background:#fffc;border-color:#b59ac9;box-shadow:0 0 0 3px #e9dff17a;color:var(--ink)}textarea.form-control{resize:vertical;min-height:106px;max-height:240px}.field-note{display:flex;justify-content:space-between;font-size:9px;color:#a499aa;margin-top:7px}.primary-button{display:flex;justify-content:center;align-items:center;gap:20px;width:100%;border:1px solid var(--purple);border-radius:7px;background:var(--purple);color:white;padding:15px 20px;font-size:12px;box-shadow:0 5px 12px #8a70a715;transition:transform .2s,background .2s}.primary-button:hover{background:var(--purple-dark);transform:translateY(-2px)}.primary-button:disabled{opacity:.45;cursor:default;transform:none}.primary-button .arrow{font-size:17px}.form-bottom{text-align:center;margin-top:13px;color:#a096a7;font-size:9px;display:flex;gap:6px;justify-content:center}.form-error{font-size:11px;color:#a1536b;line-height:1.6;margin-top:10px}.back-button{border:0;background:transparent;color:#93849f;font-size:11px;padding:0;margin:30px 0 0;display:flex;align-items:center;gap:7px}.back-button:hover{color:var(--purple-dark)}.section-space{padding-top:27px}.section-space .screen-heading{margin-top:0}.section-symbol{width:58px;height:58px;margin:0 auto 20px;border:1px solid #e0d3e9;border-radius:50%;display:grid;place-items:center;color:#a18ab3;font:32px var(--serif);background:#f3edf6}
+.intention{margin:23px auto 0;max-width:440px;text-align:center;padding:13px 20px;background:#ffffff59;border:1px solid #e5dce8;border-radius:7px}.intention small{font-size:8px;letter-spacing:1.7px;color:#a08bab;display:block;margin-bottom:4px}.intention p{font:italic 16px/1.5 var(--serif);margin:0;color:#7f7088;overflow-wrap:anywhere}.method-options{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:27px auto 0;max-width:470px}.method-option{border:1px solid #dcd0e5;border-radius:10px;padding:25px 16px;background:#ffffff65;text-align:center;color:var(--ink);transition:transform .25s,border .25s,box-shadow .25s}.method-option:hover{transform:translateY(-5px);border-color:#b299c5;box-shadow:0 14px 20px #7e62860b}.method-option svg{width:85px;height:100px;margin-bottom:17px}.method-option strong{display:block;font:22px var(--serif);margin-bottom:8px}.method-option p{font-size:11px;color:var(--muted);line-height:1.7;max-width:170px;margin:0 auto}.method-option .method-cta{font-size:10px;display:block;color:var(--purple);margin-top:20px}.method-option.own{border-color:#dcded2;background:#f2f3ec60}.own .method-cta{color:#869278}.gentle-note{font-size:10px;color:#a095a6;text-align:center;margin:24px auto 0;line-height:1.8}
+.deck{width:100%;height:230px;position:relative;margin:25px auto 0;isolation:isolate}.deck-card{position:absolute;width:64px;height:112px;left:calc(50% - 32px);top:50px;border:1px solid #a68eb8;border-radius:29px 29px 4px 4px;background:repeating-linear-gradient(45deg,transparent 0 8px,#ffffff20 8px 9px),#d8c9e4;box-shadow:0 6px 10px #5d416118;color:#987cad;transform:translate(var(--x),var(--y)) rotate(var(--r));transition:transform .4s ease,opacity .4s,border .2s;animation:fan .8s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i)*.014s);font-size:27px;padding:0}.deck-card:before{content:'';position:absolute;inset:6px;border:1px solid #b19bc2;border-radius:24px 24px 2px 2px}.deck-card:hover:not(:disabled),.deck-card:focus-visible{transform:translate(var(--x),calc(var(--y) - 22px)) rotate(var(--r));background-color:#cbb8dc;border-color:#8c6aa6;z-index:30!important}.deck-card.picked{opacity:0;transform:translate(var(--x),80px) rotate(var(--r));pointer-events:none}.deck-card:disabled:not(.picked){cursor:default}.deck.shuffling .deck-card{animation:shuffle .45s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.03s)}@keyframes fan{from{opacity:.2;transform:translate(0,20px) rotate(0)}to{opacity:1;transform:translate(var(--x),var(--y)) rotate(var(--r))}}@keyframes shuffle{from{transform:translate(-45px,10px) rotate(-12deg)}to{transform:translate(45px,-8px) rotate(12deg)}}.deck-toolbar{display:flex;justify-content:center;gap:16px;align-items:center;margin-top:-17px;margin-bottom:22px}.text-button{border:0;background:transparent;font-size:10px;color:var(--purple);padding:7px}.selection-counter{font-size:10px;color:#9b8ca6}.selected-spread{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:410px;margin:24px auto}.selected-slot{min-width:0;text-align:center}.slot-label{font-size:8px;letter-spacing:1.5px;color:#aa99b4;text-transform:uppercase;margin-bottom:10px}.slot-empty{height:165px;border:1px dashed #d9cbe3;background:#ece4f020;border-radius:48px 48px 6px 6px;display:grid;place-items:center;color:#c7b7d2;font:26px var(--serif)}.revealed-card{height:165px;animation:reveal .65s ease backwards;perspective:700px}.revealed-card svg{height:100%;width:100%;border:1px solid #d0c6b6;border-radius:48px 48px 5px 5px;background:#f5eee0;padding:4px;box-shadow:0 6px 12px #6f5c7012}.slot-name{font:14px var(--serif);margin-top:9px;color:#817188;line-height:1.3;min-height:18px}@keyframes reveal{from{opacity:0;transform:translateY(-30px) rotateY(90deg)}to{opacity:1;transform:none}}.reading-action{max-width:410px;margin:0 auto}.own-fields{max-width:410px;margin:24px auto 0}.own-field{display:flex;align-items:center;gap:10px;margin-bottom:10px}.own-field .form-control{flex:1;min-width:0}.own-field .field-number{font:italic 17px var(--serif);color:#b9a6c7;width:16px}.remove-card{background:transparent;border:0;color:#a391ac;font-size:20px;width:23px}.own-toolbar{display:flex;justify-content:space-between;align-items:center;margin:2px 0 18px}.own-toolbar small{font-size:9px;color:#a398aa}.own-fields .form-label{margin-bottom:12px}
+.loading-wrap{text-align:center;padding:75px 0 80px}.loading-orbit{position:relative;width:140px;height:140px;display:grid;place-items:center;margin:0 auto 35px;color:#a28ab4;font-size:48px}.loading-orbit:before,.loading-orbit:after{content:'';position:absolute;inset:0;border:1px solid #dfd0e8;border-radius:50%;border-top-color:#a38ab5;animation:spin 5s linear infinite}.loading-orbit:after{inset:16px;animation-direction:reverse;border-top-color:#b8bda4}.loading-wrap h1{font-size:34px}.loading-wrap p{font-size:12px;color:var(--muted);line-height:1.8}.loader-note{font-size:10px;color:#a79aad;margin-top:25px}@keyframes spin{to{transform:rotate(360deg)}}.error-panel{border:1px solid #e0cdd2;background:#faf0ef;padding:18px;border-radius:8px;color:#936775;font-size:12px;line-height:1.8;margin:25px auto;max-width:410px}.secondary-button{border:1px solid #d5c6df;color:var(--purple);background:transparent;border-radius:6px;padding:11px 18px;font-size:11px}.result-header{margin-top:30px}.result-header h1{font-size:38px}.result-cards{margin-top:28px}.result-entry{display:grid;grid-template-columns:75px 1fr;gap:20px;padding:23px 0;border-bottom:1px solid var(--line)}.result-entry svg{width:75px;height:121px;border:1px solid #d0c6b6;border-radius:35px 35px 4px 4px;padding:3px;background:#f7efdf}.result-entry small{font-size:8px;letter-spacing:1.5px;color:#a491b0}.result-entry h2{font:23px var(--serif);margin:6px 0 10px}.result-entry p{font-size:12px;line-height:1.9;color:#87788f;margin:0;white-space:pre-line;overflow-wrap:anywhere}.summary{padding:25px;background:#eee7f190;border:1px solid #e0d3e7;border-radius:9px;margin:28px 0}.summary h2{font:25px var(--serif);margin:0 0 12px}.summary p{font-size:12px;line-height:1.9;color:#87788f;white-space:pre-line;overflow-wrap:anywhere;margin:0}.demo-badge{display:inline-block;border:1px solid #cbbad6;border-radius:30px;padding:5px 12px;font-size:9px;color:#957ca7;margin-bottom:15px;background:#efe7f4}.result-actions{display:flex;gap:12px;margin-top:25px}.result-actions button{flex:1}.page-footer{text-align:center;padding:23px 20px 28px;max-width:560px;margin:0 auto;color:#a397aa;font-size:9px;line-height:1.8}.page-footer:before{content:'';display:block;width:35px;height:1px;background:#d7c9e0;margin:0 auto 17px}.page-footer p{margin:0}.footer-tiny{font-size:8px;letter-spacing:1.6px;color:#b4a7bb;margin-top:11px}.side-star{position:fixed;pointer-events:none;font-family:var(--serif);color:#d5c7df;z-index:-1}.side-star.a{top:38%;left:17%;font-size:40px;animation:shimmer 7s infinite}.side-star.b{right:17%;top:65%;font-size:25px;animation:shimmer 8s infinite -2s}.side-orbit{position:fixed;left:-200px;bottom:-290px;width:700px;height:700px;border:1px solid #dcd4e14d;border-radius:50%;z-index:-1;pointer-events:none}.side-orbit:after{content:'';position:absolute;inset:35px;border:1px solid #dcd4e13b;border-radius:50%}.paused *,.paused *:before,.paused *:after{animation:none!important;transition:none!important}body.paused{scroll-behavior:auto}
+@media(min-width:1500px){.stepper{margin-top:42px}.illustration{height:205px;margin-top:14px}.question-form{margin-top:32px}}@media(max-width:767px){.site-header{height:78px;padding:0 24px}.brand{font-size:25px}.brand-mark{font-size:30px}.header-caption{display:none}.motion-toggle{padding:7px 10px;font-size:9px}.stepper{margin-top:25px;gap:10px;max-width:360px}.step{font-size:9px;gap:6px}.step-line{max-width:25px}.app-main{padding:0 23px 20px;max-width:540px}.illustration{height:172px;margin-top:8px}.illustration>svg{width:195px}.screen h1{font-size:39px}.subtitle{font-size:11px;max-width:320px}.question-form{margin-top:25px}.form-control{font-size:12px}.header-caption{display:none}.method-options{gap:12px}.method-option{padding:22px 12px}.method-option strong{font-size:21px}.method-option p{font-size:10px}.section-space{padding-top:25px}.deck-card{width:54px;height:98px;left:calc(50% - 27px);font-size:24px}.deck{height:210px}.selected-spread{gap:12px;margin:20px auto}.slot-empty,.revealed-card{height:145px}.slot-name{font-size:12px}.back-button{margin-top:25px}.result-header h1{font-size:34px}.result-entry{gap:14px;grid-template-columns:64px 1fr}.result-entry svg{width:64px;height:108px}.result-entry h2{font-size:21px}.page-footer{padding-top:17px}.side-star.a{left:5%;top:35%;font-size:20px}.side-star.b{right:5%;font-size:18px}.result-actions{flex-direction:column}}@media(max-width:360px){.screen h1{font-size:35px}.step{font-size:8px}.stepper{gap:8px}.method-option strong{font-size:18px}.slot-label{font-size:7px;letter-spacing:1px}.slot-empty,.revealed-card{height:128px}.app-main{padding-left:20px;padding-right:20px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+.deck-toolbar{position:relative;z-index:2;margin-top:0}.deck{pointer-events:none}.deck-card{pointer-events:auto}.deck-card.picked{pointer-events:none}.result-entry img{width:75px!important;height:121px!important;object-fit:contain}.screen h1:focus{outline:none}
 
-    .card {
-        position: absolute;
-    }
-    .card:hover{
-        background-color: rgb(120, 224, 179);
-    }
+.revealed-card,.slot-empty{border-radius:7px}.revealed-card{overflow:hidden;background:#f6eddf;border:1px solid #d5c4b2;box-shadow:0 5px 14px #6f5c7015}.tarot-image{display:block;width:100%;height:100%;object-fit:contain;border-radius:5px}.result-entry .tarot-image{width:75px;height:121px;object-fit:contain}.unknown-card{display:grid;place-items:center;width:100%;height:100%;min-height:110px;background:#e9dfee;border:1px solid #c9b6d6;border-radius:7px;color:#a48cb6;font-size:35px}.result-entry .unknown-card{height:121px}.slot-name{overflow-wrap:anywhere;font-size:12px}#deckStatus{margin-bottom:15px}
+@media(max-width:767px){.result-entry .tarot-image{width:64px!important;height:108px!important}}
+.deck-card:hover:not(:disabled),.deck-card:focus-visible{z-index:100!important;transform:translate(var(--x),var(--y)) rotate(var(--r));filter:brightness(1.04);box-shadow:0 0 0 2px #b39ac655,0 7px 14px #5d416125}
 
-    .cardShape {
-        min-width: 60px;
-        max-width: 60px; /* Ancho de cada div interno */
-        height: 100px; /* Altura de cada div interno */
-        background-color: rgb(140, 255, 205);
-        border: 1px solid #8b898a;
-        text-align: center;
-        line-height: 100px; /* Alinea verticalmente el texto */
-        box-shadow: 10px 10px 15px -15px rgba(0,0,0,0.15);
-        
-    }
-    .levitar {
-            width: 100px; /* Ajusta el tamaño según sea necesario */
-            animation: levitar 5s ease-in-out infinite;
-    }
+/* Real card backs, spread from a stack on the left. */
+.deck-card{border:0;border-radius:4px;background:transparent;overflow:hidden;animation:none;box-shadow:1px 3px 7px #3b314b21;transition:opacity .22s ease,filter .18s ease}
+.deck-card:before{content:none}
+.deck-card .deck-back{position:absolute;max-width:none;width:129.76%;height:118.4%;left:-13.18%;top:-9.15%;object-fit:fill;pointer-events:none;user-select:none}
+.deck-card:hover:not(:disabled),.deck-card:focus-visible{background:transparent;filter:brightness(1.08);box-shadow:1px 4px 9px #3b314b30}
+.deck.dealing .deck-card{animation:spread-left .55s cubic-bezier(.22,.61,.36,1) both;animation-delay:calc(var(--i)*.012s)}
+@keyframes spread-left{from{transform:translate(var(--start-x),20px) rotate(-4deg)}to{transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+.selected-spread .slot-empty,.selected-spread .revealed-card{width:100%;height:auto;aspect-ratio:7/12;border-radius:4px}
+.selected-spread .revealed-card{border:0;padding:0;background:transparent;overflow:hidden;box-shadow:0 4px 10px #3b314b16;animation:card-arrive .25s ease-out}
+.selected-spread .revealed-card .tarot-image{display:block;width:100%;height:100%;object-fit:fill;border:0;border-radius:4px;padding:0}
+@keyframes card-arrive{from{opacity:0}to{opacity:1}}
 
-    @keyframes levitar {
-        0%, 100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-20px); /* Ajusta la altura del levitamiento */
-        }
-    }
-    .btn-primary{
-        background-color: #ffffff6e;
-        border: 1px solid #ffffff;
-        border-radius: 4px;
-        color: #FFF;
-    }
-    .btn-primary:hover{
-        background-color: #ffffff;
-        border: 1px solid #ffffff;
-        border-radius: 4px;
-        color: #9780C4;
-    }
-    h1{
-        color:rgb(140, 255, 205);
-        font-style: italic;
-        font-weight: 900;
-    }
-    .form-control{
-        border-radius: 4px;
-        padding: 10px 20px;
-        border: 1px solid #FFF;
-        background:none;
-        color:#FFF;
-    }
-    .form-control::placeholder{
-        color:#ffffffbb
-    }
-    .form-control:focus{
-        border: 1px solid #FFF;
-        box-shadow: none;
-        background:#ffffff16;
-        color:#FFF;
-    }
-    body{
-        height: 100svh;
-        overflow-y: auto;
-        background: linear-gradient(rgb(179, 3, 255), #4f5181);
-    }
-    .capa {
-        height: 100vh;        /* máximo 80% del viewport */
-        overflow-y: auto;        /* scroll vertical si el contenido lo necesita */
-        overflow-x: hidden;      /* sin scroll horizontal */
-        color:#FFF;
-    }
-    .logo {
-        font-family: "Poppins", sans-serif;
-        font-size: 4em;
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-    .text_font{
-        font-family: "Poppins", sans-serif;
-        font-size: 1.3em;line-height: 1.1;
-        
-    }
-    
-    .spinner {
-    background-image: linear-gradient(#9780C4 35%,rgb(140, 255, 205));
-    width: 100px;
-    height: 100px;
-    animation: spinning82341 1.7s linear infinite;
-    text-align: center;
-    border-radius: 50px;
-    filter: blur(1px);
-    box-shadow: 0px -5px 20px 0px #9780C4, 0px 5px 20px 0px rgb(140, 255, 205);
-    margin-top: 30vh;
-    }
+/* The supplied illustration fades into the page; mobile keeps its top-right details. */
+.header-art{position:absolute;inset:0 0 auto;height:295px;z-index:-1;pointer-events:none;background-image:linear-gradient(to bottom,rgba(128,125,166,0) 15%,rgba(128,125,166,.28) 48%,var(--paper) 100%),url('/static/img/header.jpg');background-position:center top;background-size:cover;background-repeat:no-repeat}
+.site-header{height:68px;margin-bottom:100px;border:0;padding:0 36px}.brand{font-size:28px}.motion-toggle{background:#f8f5f1d9;border-color:#e6deea99;backdrop-filter:blur(8px)}
+.stepper{margin:0 auto 20px}.app-main{padding-bottom:12px;max-width:600px}.screen h1{font-size:37px;margin:12px 0 20px}.question-form{margin:0 auto}.question-form .primary-button{margin-top:17px!important}.question-form .mb-3{margin-bottom:15px!important}textarea.form-control{min-height:90px}.field-note{justify-content:flex-end;margin-top:4px}.form-control{padding:11px 13px}.primary-button{padding:12px 18px}.back-button{margin:0 0 10px}.section-space{padding-top:0}.intention{margin-top:0;padding:9px 14px}.intention p{font-size:14px}.intention small{font-size:7px;margin-bottom:2px}
+.method-options{margin-top:18px;max-width:410px}.method-option{padding:20px 12px}.method-option svg{height:75px;width:70px;margin-bottom:12px}.method-option strong{font-size:22px;margin:0}.own-fields{margin-top:0}.own-toolbar{margin-bottom:12px}.deck{height:175px;margin:0 auto}.deck-card{top:18px}.deck-toolbar{margin-bottom:8px}.selected-spread{max-width:360px;margin:12px auto 16px;gap:14px}.slot-label{margin-bottom:7px}.slot-name{font-size:11px;margin-top:6px}.loading-wrap{padding:32px 0}.loading-orbit{width:100px;height:100px;margin-bottom:23px}.result-header{margin-top:0}.result-cards{margin-top:10px}.result-entry{padding:17px 0}.summary{margin:20px 0;padding:20px}.page-footer{padding:18px 20px 20px;font-size:9px}.page-footer:before{display:none}.side-star{opacity:.45}.error-panel{margin:18px auto}
+@media(min-width:1500px){.stepper{margin-top:0}.question-form{margin-top:0}}
+@media(max-width:767px){.header-art{height:245px;background-position:right top;background-size:auto 290px}.site-header{height:62px;margin-bottom:103px;padding:0 20px}.brand{font-size:25px}.stepper{margin:0 auto 18px}.app-main{padding:0 21px 8px}.screen h1{font-size:33px;margin:8px 0 17px}.question-form{margin-top:0}.section-space{padding-top:0}.back-button{margin:0 0 9px}.method-option{padding:18px 10px}.method-option strong{font-size:20px}.method-option svg{height:65px;width:60px}.deck{height:155px;margin-top:0}.deck-card{top:13px}.selected-spread{gap:12px;margin:10px auto 14px;max-width:330px}.slot-name{font-size:10px}.result-header{margin-top:0}.result-header h1{font-size:32px}.own-fields{margin-top:0}.page-footer{padding:14px 18px 18px}}
+@media(max-width:360px){.header-art{height:218px;background-size:auto 265px}.site-header{margin-bottom:82px}.screen h1{font-size:30px}.method-option strong{font-size:18px}}
+.header-art{background-size:100% 100%,cover;background-position:center top,center top}
+@media(max-width:767px){.header-art{background-image:linear-gradient(to bottom,rgba(128,125,166,0) 5%,rgba(128,125,166,.15) 35%,rgba(128,125,166,.94) 70%,var(--paper) 100%),url('/static/img/header.jpg');background-size:100% 100%,auto 290px;background-position:center top,right top}}
+@media(max-width:360px){.header-art{background-size:100% 100%,auto 265px}}
+/* Keep the artwork visible through at least 40% of the viewport. */
+.header-art{height:max(360px,55vh);height:max(360px,55svh);background-size:100% 100%,cover;background-image:linear-gradient(to bottom,rgba(128,125,166,0) 20%,rgba(128,125,166,.12) 60%,rgba(128,125,166,.35) 75%,var(--paper) 100%),url('/static/img/header.jpg')}
+@media(max-width:767px){.header-art{background-position:center top,right top}}
 
-    .spinner1 {
-    background-color: #8B22CC;
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
-    filter: blur(10px);
-    }
-
-    @keyframes spinning82341 {
-    to {
-        transform: rotate(360deg);
-    }
-    }
+/* Clear progress and headings over the extended artwork. */
+.atmosphere{z-index:-2}
+.header-art{background-image:linear-gradient(to bottom,rgba(44,32,61,.43) 0%,rgba(44,32,61,.43) 58%,rgba(128,125,166,.7) 78%,var(--paper) 90%,var(--paper) 100%),url('/static/img/header.jpg');-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 65%,rgba(0,0,0,.9) 76%,rgba(0,0,0,.35) 90%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 65%,rgba(0,0,0,.9) 76%,rgba(0,0,0,.35) 90%,transparent 100%)}
+.brand,.brand b,.brand-mark{color:#fff7ff;text-shadow:0 2px 8px #21142b66}
+.motion-toggle{color:#fff7ff;background:#35244180;border:1px solid #ffffff24}
+.motion-dot{background:#d1e4bb}
+.stepper{width:fit-content;max-width:calc(100% - 36px);padding:10px 17px;gap:13px;background:#352441a8;border:1px solid #ffffff24;border-radius:40px;box-shadow:0 5px 18px #24133216;backdrop-filter:blur(12px)}
+.step{font-size:11px;color:#eee3f5;gap:8px}
+.step .number{width:27px;height:27px;flex:none;color:#fff;background:#ffffff15;border:1px solid #ffffff70;font-weight:600;font-size:11px}
+.step.current{color:#fff;font-weight:700}.step.current .number{color:#5d4075;background:#fff7ff;border-color:#fff7ff;box-shadow:0 0 0 3px #ffffff16}
+.step.done{color:#f2ecf5}.step.done .number{background:#dae7c8;border-color:#dae7c8;color:#526440}
+.step-line{width:24px;flex:none;background:#ffffff57}
+.screen h1,.screen h1 em{color:#fff7ff;text-shadow:0 2px 5px #26163080,0 0 18px #26163040}
+.screen h1 em{color:#f0dfff}
+.back-button{color:#fff7ff;text-shadow:0 1px 5px #26163099}
+.back-button:hover{color:#fff}
+@media(max-width:767px){.stepper{gap:10px;padding:9px 13px}.step{font-size:10px;gap:7px}.step-line{width:15px}.step .number{width:25px;height:25px}.screen h1{margin-top:10px}}
+@media(max-width:360px){.stepper{gap:8px;padding:8px 11px}.step{font-size:9px;gap:6px}.step-line{width:10px}}
+.question-form,.own-fields{padding:18px;background:#fcfaf7f0;border:1px solid #ffffff80;border-radius:12px;box-shadow:0 6px 20px #2817370a;backdrop-filter:blur(8px)}
+.intention,.method-option,.method-option.own{background:#fcfaf7ef;border-color:#ffffff8c;backdrop-filter:blur(8px)}
+.form-control{background:#fffdfbf5}
+.form-control:focus{background:#fffdfb}
+@media(max-width:767px){.question-form,.own-fields{padding:16px}}
+/* Match the supplied lavender swatch throughout the lower page and image fade. */
+.atmosphere{background:none}.cloud{opacity:.06}
+.page-footer,.selection-counter,.slot-label,.slot-name,#deckStatus,.deck-toolbar .text-button,.loading-wrap p{color:#f4effa}
+.selected-spread .slot-empty{border-color:#eee4ff80;color:#f0e6ff;background:#ffffff08}
+.result-entry{border-color:#ffffff35}.result-entry h2,.result-entry p,.result-entry small{color:#fff7ff}
+.summary{background:#fcfaf7f0}.summary p{color:#6d6275}
+.result-actions .secondary-button{color:#fff7ff;border-color:#ffffff80}
 </style>
 </head>
-<body style="padding: 0px;">
-    
-    <div class="container-fluid m-0 p-0 capa capa_0">
-        <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4" style="padding: 10px;">
-            <div class="col-12" style="padding: 10px 0px;text-align: center;text-align: center;">
-                <center>
-                <div class="spinner">
-                    <div class="spinner1"></div>
-                </div>
-                <p style="margin-top: 20px;color: rgb(140, 255, 205);" id="capa_0_txt"></p>
-                </center>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid m-0 p-0 capa capa_100">
-        <div class="col-12" style="padding: 10px;">
-            <div class="col-12" style="padding: 20vh 0px 10px 0px;text-align: center;text-align: center;">
-                <h3 data="translate" dataTranslate="100_1" style="margin-bottom: 30px;">Set your profile</h3>
-                <p data="translate" dataTranslate="100_2">Language</p>
-                <select name="" id="language_select" class="form-control"></select>
-                <p data="translate" dataTranslate="100_3" style="margin-top: 20px;">Your name</p>
-                <input type="text" class="form-control">
-                <button data="translate" dataTranslate="100_4" class="btn btn-primary" style="width: 100%;margin-top: 30px;" onclick="capa(2);initCards()">Continue</button>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid m-0 p-0 capa capa_1">
-        <div class="col-12 col-md-4 offset-md-4 col-lg-4 offset-lg-4" style="padding: 10px;">
-            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
-                <div class="col-12" style="padding-top: 30px;">
-                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
-                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
-                <input type="text" class="form-control" id="name_form" placeholder="What's your name?" style="margin-bottom: 10px;">
-                <textarea placeholder="Input your question here" class="form-control" name="" id="question_form" style="width: 100%;margin-bottom: 0px;"></textarea>
-                <button data="translate" dataTranslate="100_4" class="btn btn-primary" style="width: 100%;margin-top: 10px;" onclick="capa(101);">Start now</button>
-                <button data="translate" dataTranslate="100_4" class="btn btn-primary" style="display: none;width: 100%;margin-top: 10px;background-color: #FFF;bordr:1px solid #9780C4;color:#9780C4;" onclick="capa(101);">Who are we?</button>
-                <button data="translate" dataTranslate="100_4" class="btn btn-primary" style="display: none;width: 100%;margin-top: 10px;background-color: #FFF;bordr:1px solid #9780C4;color:#9780C4;" onclick="capa(101);">Contact us</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid m-0 p-0 capa capa_101">
-        <div class="col-12 col-md-4 offset-md-4 col-lg-4 offset-lg-4" style="padding: 10px;">
-            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
-                <button class="btn" style="color:#fff;border: 1px solid #ffffff00;background-color: #ffffff00;border-radius: 100px;float: left;" onclick="capa(1)"><i class="zmdi zmdi-arrow-left"></i> Back</button>
-                <div class="col-12" style="padding-top: 40px;">
-                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
-                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
-                </div>
-                <button data="translate" dataTranslate="1_2" class="btn btn-primary" style="width: 100%;margin-bottom: 10px;" onclick="capa(102);initCards()">Use virtual cards</button>
-                <br>
-                Or 
-                <br>
-                <button data="translate" dataTranslate="1_2" class="btn btn-primary" style="width: 100%;margin-top: 10px;" onclick="capa(105)">Use your own cards</button>
-             </div>
-        </div>
-    </div>
-    <div class="container-fluid m-0 p-0 capa capa_102">
-        <div class="col-12 col-md-4 offset-md-4 col-lg-4 offset-lg-4" style="padding: 10px;">
-            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
-                <button class="btn" style="color:#fff;border: 1px solid #ffffff00;background-color: #ffffff00;border-radius: 100px;float: left;" onclick="capa(101)"><i class="zmdi zmdi-arrow-left"></i> Back</button>
-                <div class="col-12" style="padding-top: 40px;">
-                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
-                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
-                 </div>
-                <h3  data="translate" dataTranslate="2_1" class="text_font">Choose your cards (3)</h3>
-             </div>
-            <div class="card-container col-12 p-0"  style="padding: 0px 0px;display: none;min-height: 120px;">
-                <!-- Fin de repetición -->
-            </div>
-            <div class="col-12" id="chooseCard" data="translate" dataTranslate="2_2" style="padding: 20px 0px 0px 0px;text-align: center;display: none;min-height: 170px;">
-                Selected cards
-            </div>
-            <button class="btn btn-primary btn-getanswer" style="width: 100%;display: none;margin-bottom: 10px;" onclick="capa(3);consultCard(true)">Get your answer now</button>
-        </div>
-    </div>
+<body>
+<div class="header-art" aria-hidden="true"></div><div class="atmosphere" aria-hidden="true"><div class="cloud one"></div><div class="cloud two"></div><div class="cloud three"></div></div><span class="side-star a" aria-hidden="true">✧</span><span class="side-star b" aria-hidden="true">✦</span><div class="side-orbit" aria-hidden="true"></div>
+<header class="site-header"><a class="brand" href="#" id="homeLink" aria-label="TarotGPT, home"><span class="brand-mark" aria-hidden="true">✳</span><span>Tarot<b>GPT</b></span></a><button class="motion-toggle" id="motionToggle" aria-pressed="true"><span class="motion-dot"></span><span>Motion on</span></button></header>
+<nav class="stepper" aria-label="Reading progress"><div class="step current" data-step="1" aria-current="step"><span class="number">1</span> Question</div><span class="step-line"></span><div class="step" data-step="2"><span class="number">2</span> Cards</div><span class="step-line"></span><div class="step" data-step="3"><span class="number">3</span> Reading</div></nav>
+<main class="app-main">
+<section class="screen" id="questionScreen" aria-labelledby="questionTitle">
 
-    <div class="container-fluid m-0 p-0 capa capa_103">
-        <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px;">
-            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
-                <div class="col-12" style="padding-top: 30px;">
-                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
-                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
-                </div>
-                <h3  data="translate" dataTranslate="2_1" class="text_font">Your fortune</h3>
-             </div>
-            <div class="col-12 text_font" id="reading" style="padding: 0px 15px;">
-                <!-- Fin de repetición -->
-            </div>
-            <button class="btn btn-primary" data="translate" dataTranslate="3_2" style="width: 100%;" onclick="capa(1);$('#name_form').val('');$('#question_form').val('');">Start again</button>
-        </div>
-    </div>
-
-    <div class="container-fluid m-0 p-0 capa capa_105">
-        <div class="col-12 col-md-4 offset-md-4 col-lg-4 offset-lg-4" style="padding: 10px;">
-            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
-                <button class="btn" style="color:#fff;border: 1px solid #ffffff00;background-color: #ffffff00;border-radius: 100px;float: left;" onclick="capa(101)"><i class="zmdi zmdi-arrow-left"></i> Back</button>
-                <div class="col-12" style="padding-top: 40px;">
-                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
-                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
-                  </div>
-                <h3  data="translate" dataTranslate="2_1" class="text_font">Input your cards</h3>
-             </div>
-            <div class="card-input-container col-12 p-0"  style="padding: 0px 0px;">
-                <input type="text" class="form-control card-input" placeholder="Input your card here" style="margin-bottom: 10px;">
-            </div>
-            <button class="btn btn-primary btn-getanswer" style="width: 100%;background-color: #FFF;color:#9780C4;border: 1px solid #9780C4;margin-bottom: 10px;" onclick="addCard()">Add new card</button>
-            <button class="btn btn-primary btn-getanswer" style="width: 100%;margin-bottom: 10px;" onclick="capa(3);consultCard(false)">Get your answer now</button>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        function initCards(){
-            $(".btn-getanswer").hide() 
-            total=40;
-            totalChoose=0;
-            cardsChoose=[]
-            $("#chooseCard").hide()
-            $("#chooseCard").html("")
-            $(".card-container").html("");
-            $(".card-container").show();
-            ancho=$(".card-container").width()
-            $(".card-container").append(`
-            <div class="card cardShape" data="0" onclick="move(this)"></div>
-            `)
-            anchoCard=$(".card").width()
-            separacion=(ancho-anchoCard)/(total-1);
-            for (let x = 1; x < (total); x++) {
-                $(".card-container").append(`
-                <div class="card cardShape" style="margin-left:0px" data="${x}" onclick="move(this)"></div>
-                `)
-            }
-            mezclarCartas(separacion)
-        }
-
-        function move(e){
-            if(totalChoose<3){
-            $(e).css("margin-top","20px")
-            totalChoose++;
-            cardsChoose.push($(e).attr('data'))
-            }
-            if(totalChoose==3){
-                setTimeout(() => {
-                    $(".card").css("margin-top","0px")
-                    cerrarMazo()
-                    setTimeout(() => {
-                       $(".card-container").hide();
-                       showCards();
-                    }, 500);
-                }, 500);
-                
-            }
-        }
-
-        async function showCards(){
-            $("#chooseCard").show()
-            $("#chooseCard").html("")
-            ancho=$("#chooseCard").width()/4
-            x=1;
-            setTimeout(() => {
-                $(".btn-getanswer").show() 
-            }, 1200);
-            cardsChoose.forEach(e => {
-                const fijar=x*ancho-40;
-                const imgPegar=cardsSuffles[e].img;
-                setTimeout(() => {
-                    $("#chooseCard").append(`
-                    <div class="card levitar" style="margin-left:${fijar}px;width:80px">
-                        <img src="static/cards/${imgPegar}" style="width:100%;border:3px solid #9780C4;border-radius:3px">
-                    </div>
-                `)
-                }, 300*x);
-                x++
-            });
-        }
+<div class="screen-heading"><h1 id="questionTitle">Ask <em>the cards.</em></h1></div>
+<form class="question-form" id="questionForm" novalidate><div class="mb-3"><label class="form-label" for="name_form">Your name</label><input class="form-control" id="name_form" name="name" autocomplete="given-name" maxlength="80" placeholder="Name" required></div><div><label class="form-label" for="question_form">Your question</label><textarea class="form-control" id="question_form" name="question" placeholder="What would you like to know?" maxlength="1000" required aria-describedby="questionHelp"></textarea><div class="field-note" id="questionHelp"><span id="characterCount">0 / 1000</span></div></div><p class="form-error" id="formError" role="alert" hidden></p><button class="primary-button mt-4" type="submit">Start reading <span class="arrow" aria-hidden="true">↗</span></button></form>
+</section>
+<section class="screen" id="methodScreen" aria-labelledby="methodTitle" hidden><button class="back-button" data-back="questionScreen">← Back</button><div class="section-space screen-heading"><h1 id="methodTitle">Choose <em>your deck.</em></h1></div><div class="intention"><small>YOUR QUESTION</small><p data-question></p></div><div class="method-options"><button class="method-option" id="virtualMethod"><svg viewBox="0 0 100 115" fill="none" aria-hidden="true"><rect x="12" y="18" width="43" height="80" rx="4" transform="rotate(-14 12 18)" fill="#ebe2f1" stroke="#b9a0ca"/><rect x="50" y="8" width="43" height="80" rx="4" transform="rotate(14 50 8)" fill="#ebe2f1" stroke="#b9a0ca"/><path d="M30 29a20 20 0 0 1 40 0v71H30Z" fill="#f7f2fa" stroke="#ab8fbf"/><path d="M50 42q0 18 13 18-13 0-13 18 0-18-13-18 13 0 13-18Z" fill="#b49ac7"/></svg><strong>Virtual cards</strong></button><button class="method-option own" id="ownMethod"><svg viewBox="0 0 100 115" fill="none" aria-hidden="true"><rect x="17" y="19" width="48" height="82" rx="4" transform="rotate(-10 17 19)" fill="#edf0e6" stroke="#b4bea5"/><path d="M38 31a22 22 0 0 1 44 0v73H38Z" fill="#f4f6ee" stroke="#a7b294"/><path d="M66 43a17 17 0 1 0 10 27 16 16 0 0 1-10-27Z" fill="#afbc9d"/><path d="m47 89 8-7 8 7 8-7" stroke="#b2bea1"/></svg><strong>My own cards</strong></button></div></section>
+<section class="screen" id="virtualScreen" aria-labelledby="virtualTitle" hidden><button class="back-button" data-back="methodScreen">← Back</button><div class="section-space screen-heading"><h1 id="virtualTitle">Choose <em>3 cards.</em></h1></div><div class="deck" id="deck" role="group" aria-label="Virtual tarot deck"></div><p id="deckStatus" class="gentle-note" role="status" hidden></p><div class="deck-toolbar"><span class="selection-counter" id="selectionCounter" role="status" aria-live="polite">0 of 3 selected</span><span style="color:#d5c7df">·</span><button class="text-button" id="shuffleButton">↻ Shuffle</button></div><div class="selected-spread" id="selectedSpread"></div><div class="reading-action"><button class="primary-button" id="virtualRead" disabled>Read my cards <span aria-hidden="true">✧</span></button></div></section>
+<section class="screen" id="ownScreen" aria-labelledby="ownTitle" hidden><button class="back-button" data-back="methodScreen">← Back</button><div class="section-space screen-heading"><h1 id="ownTitle">Enter <em>your cards.</em></h1></div><form class="own-fields" id="ownForm" novalidate><div class="form-label">Cards <small>1–12 cards</small></div><div id="ownFields"></div><datalist id="tarotCardNames"></datalist><div class="own-toolbar"><button class="text-button" id="addCard" type="button">＋ Add card</button><small>In the order drawn</small></div><p class="form-error" id="ownError" role="alert" hidden></p><button class="primary-button" type="submit">Read my cards <span aria-hidden="true">✧</span></button></form></section>
+<section class="screen" id="loadingScreen" aria-labelledby="loadingTitle" hidden><div class="loading-wrap"><div class="loading-orbit" aria-hidden="true">✧</div><h1 id="loadingTitle">Reading <em>your cards.</em></h1><p id="loadingText" role="status" aria-live="polite">Preparing your reading…</p></div></section>
+<section class="screen" id="errorScreen" aria-labelledby="errorTitle" hidden><div class="section-space screen-heading mt-4"><h1 id="errorTitle">A brief <em>pause.</em></h1></div><div class="error-panel" id="apiError" role="alert"></div><div class="reading-action"><button class="primary-button" id="retryButton">Try again ↻</button><button class="text-button d-block mx-auto mt-3" id="editCards">← Back to cards</button></div></section>
+<section class="screen" id="resultScreen" aria-labelledby="resultTitle" hidden><div class="screen-heading result-header"><h1 id="resultTitle">Your <em>reading.</em></h1></div><div class="intention"><small>YOUR QUESTION</small><p data-question></p></div><div class="result-cards" id="reading"></div><div class="summary"><h2>The bigger picture</h2><p id="summaryText"></p></div><div class="result-actions"><button class="primary-button" id="startAgain">New reading ↗</button><button class="secondary-button" id="backToCards">Back to cards</button></div></section>
+</main><footer class="page-footer">For reflection. Your choices remain yours.</footer>
+<script src="/static/cards/cards.js" defer></script>
+<script src="/static/assets/tarot.js" defer></script>
+</body></html>
 
 
-        async function mezclarCartas(separacion) {
-        x=0;ind=1;acc=0
-        $(".card").each(function(index) {
-            acc=(((((x-20)*(x-20)))*-1)+240)/30
-            console.log(x,ind,acc)
-            $(this).animate({
-                marginTop: 0,
-                marginLeft: separacion * x
-            }, 800); // Ajusta la velocidad de la animación aquí
-            
-            x++;
 
-        });
-        }
-
-        function cerrarMazo(){
-            $(".card").each(function(index) {
-                $(this).animate({
-                    marginLeft: 0
-                }, 100); // Ajusta la velocidad de la animación aquí
-            });
-        }
-
-        function sleep(timeout){
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve(true)
-                }, timeout);
-            })
-        }
-
-        loadingTxt=[
-            'Analyzing your cards',
-            'Analyzing your questions',
-            'Understanding the situation',
-            'Reading your fortune'
-        ]
-
-        txtCapa=()=>{
-            loadingTxt.forEach( (e,i) => {
-                setTimeout(() => {
-                    $("#capa_0_txt").html(e+"..")
-                }, i*2000);
-            });
-        }
-        
-        function capa(i){
-            $(".capa").hide()
-            $(`.capa_${i}`).show()
-            if(i==0){$("#capa_0_txt").html("")}
-        }
-
-        
-        totalChoose=0;
-        cardsChoose=[];
-        cardsSuffles=[];
-        capa(1)
-
-        $(window).on("load",async()=>{
-        const response=await fetch('static/tarot-images.json');
-        const {cards}=await response.json()
-        cardsSuffles=[...cards]; 
-        })
-
-        function addCard() {
-            $(".card-input-container").append(`<input type="text" class="form-control card-input" placeholder="Input your card here" style="margin-bottom: 10px;">`)
-        }
-
-        function consultCard(virtual=true){
-            cards="";x=1;
-            if(virtual){
-                cardsChoose.forEach(e => {
-                cards+=x+")"+cardsSuffles[e].name+".";
-                x++;
-                });
-            }else{
-                $(".card-input").each(function(){
-                    cards+=x+")"+$(this).val()+".";
-                    x++;
-                })
-            }
-            question=$("#question_form").val()
-            name=$("#name_form").val()
-            capa(0)
-            txtCapa()
-            
-            console.log({name,cards,question})
-            var settings = {
-                "url": "/api/tarot",
-                "method": "POST",
-                "timeout": 0,
-                "headers": {
-                "Content-Type": "application/json"
-                },
-                "data": JSON.stringify({name,cards,question}),
-            };
-            console.log("Enviando")
-            $.ajax(settings).done(function (r) {
-                console.log(r)
-                if(r.error){
-                    alert("An error has happened, please try again.")
-                    capa(102)
-                    return;
-                }
-                if(virtual){
-                    readingResult=`
-                    <p><img src="static/cards/${cardsSuffles[cardsChoose[0]].img}" style="margin:5px;float:left;width:70px"> ${r.cards[0].meaning}</p>
-                    <p><img src="static/cards/${cardsSuffles[cardsChoose[1]].img}" style="margin:5px;float:left;width:70px"> ${r.cards[1].meaning}</p>
-                    <p><img src="static/cards/${cardsSuffles[cardsChoose[2]].img}" style="margin:5px;float:left;width:70px"> ${r.cards[2].meaning}</p>`
-                }else{
-                    readingResult=`
-                    <p>${r.cards[0].meaning}</p>
-                    <p>${r.cards[1].meaning}</p>
-                    <p>${r.cards[2].meaning}</p>`
-                    
-                }
-                $("#reading").html(`
-                <h1 style="text-align:center;color:#9780C4">What do your letters say?</h1>
-                    ${readingResult}
-                <h1 style="text-align:center;color:#9780C4">In summary..</h1>
-                <p>${r.resume}</p>
-                `)
-                capa(103)
-            })
-        }
-
-        
-        
-    </script>
-</body>
-</html>

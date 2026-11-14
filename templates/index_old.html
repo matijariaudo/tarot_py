@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#9780C4">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playwrite+HU:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<title>Tarot AI</title>
+<style>
+    .card-container {
+        display: flex;
+        height: 130px;
+    }
+
+    .card {
+        position: absolute;
+    }
+    .card:hover{
+        background-color: rgb(120, 224, 179);
+    }
+
+    .cardShape {
+        min-width: 60px;
+        max-width: 60px; /* Ancho de cada div interno */
+        height: 100px; /* Altura de cada div interno */
+        background-color: rgb(140, 255, 205);
+        border: 1px solid #8b898a;
+        text-align: center;
+        line-height: 100px; /* Alinea verticalmente el texto */
+        box-shadow: 10px 10px 15px -15px rgba(0,0,0,0.15);
+        
+    }
+    .levitar {
+            width: 100px; /* Ajusta el tamaño según sea necesario */
+            animation: levitar 5s ease-in-out infinite;
+    }
+
+    @keyframes levitar {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px); /* Ajusta la altura del levitamiento */
+        }
+    }
+    .btn-primary{
+        background-color: #ffffff6e;
+        border: 1px solid #ffffff;
+        border-radius: 4px;
+        color: #FFF;
+    }
+    .btn-primary:hover{
+        background-color: #ffffff;
+        border: 1px solid #ffffff;
+        border-radius: 4px;
+        color: #9780C4;
+    }
+    h1{
+        color:rgb(140, 255, 205);
+        font-style: italic;
+        font-weight: 900;
+    }
+    .form-control{
+        border-radius: 4px;
+        padding: 10px 20px;
+        border: 1px solid #FFF;
+        background:none;
+        color:#FFF;
+    }
+    .form-control::placeholder{
+        color:#ffffffbb
+    }
+    .form-control:focus{
+        border: 1px solid #FFF;
+        box-shadow: none;
+        background:#ffffff16;
+        color:#FFF;
+    }
+    body{
+        height: 100svh;
+        overflow-y: auto;
+        background: linear-gradient(rgb(179, 3, 255), #4f5181);
+    }
+    .capa {
+        height: 100vh;        /* máximo 80% del viewport */
+        overflow-y: auto;        /* scroll vertical si el contenido lo necesita */
+        overflow-x: hidden;      /* sin scroll horizontal */
+        color:#FFF;
+    }
+    .logo {
+        font-family: "Poppins", sans-serif;
+        font-size: 4em;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .text_font{
+        font-family: "Poppins", sans-serif;
+        font-size: 1.3em;line-height: 1.1;
+        
+    }
+    
+    .spinner {
+    background-image: linear-gradient(#9780C4 35%,rgb(140, 255, 205));
+    width: 100px;
+    height: 100px;
+    animation: spinning82341 1.7s linear infinite;
+    text-align: center;
+    border-radius: 50px;
+    filter: blur(1px);
+    box-shadow: 0px -5px 20px 0px #9780C4, 0px 5px 20px 0px rgb(140, 255, 205);
+    margin-top: 30vh;
+    }
+
+    .spinner1 {
+    background-color: #8B22CC;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    filter: blur(10px);
+    }
+
+    @keyframes spinning82341 {
+    to {
+        transform: rotate(360deg);
+    }
+    }
+</style>
+</head>
+<body style="padding: 0px;">
+    
+    <div class="container-fluid m-0 p-0 capa capa_0">
+        <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4" style="padding: 10px;">
+            <div class="col-12" style="padding: 10px 0px;text-align: center;text-align: center;">
+                <center>
+                <div class="spinner">
+                    <div class="spinner1"></div>
+                </div>
+                <p style="margin-top: 20px;color: rgb(140, 255, 205);" id="capa_0_txt"></p>
+                </center>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid m-0 p-0 capa capa_100">
+        <div class="col-12" style="padding: 10px;">
+            <div class="col-12" style="padding: 20vh 0px 10px 0px;text-align: center;text-align: center;">
+                <h3 data="translate" dataTranslate="100_1" style="margin-bottom: 30px;">Set your profile</h3>
+                <p data="translate" dataTranslate="100_2">Language</p>
+                <select name="" id="language_select" class="form-control"></select>
+                <p data="translate" dataTranslate="100_3" style="margin-top: 20px;">Your name</p>
+                <input type="text" class="form-control">
+                <button data="translate" dataTranslate="100_4" class="btn btn-primary" style="width: 100%;margin-top: 30px;" onclick="capa(2);initCards()">Continue</button>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid m-0 p-0 capa capa_1">
+        <div class="col-12 col-md-4 offset-md-4 col-lg-4 offset-lg-4" style="padding: 10px;">
+            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
+                <div class="col-12" style="padding-top: 30px;">
+                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
+                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
+                <input type="text" class="form-control" id="name_form" placeholder="What's your name?" style="margin-bottom: 10px;">
+                <textarea placeholder="Input your question here" class="form-control" name="" id="question_form" style="width: 100%;margin-bottom: 0px;"></textarea>
+                <button data="translate" dataTranslate="100_4" class="btn btn-primary" style="width: 100%;margin-top: 10px;" onclick="capa(101);">Start now</button>
+                <button data="translate" dataTranslate="100_4" class="btn btn-primary" style="display: none;width: 100%;margin-top: 10px;background-color: #FFF;bordr:1px solid #9780C4;color:#9780C4;" onclick="capa(101);">Who are we?</button>
+                <button data="translate" dataTranslate="100_4" class="btn btn-primary" style="display: none;width: 100%;margin-top: 10px;background-color: #FFF;bordr:1px solid #9780C4;color:#9780C4;" onclick="capa(101);">Contact us</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid m-0 p-0 capa capa_101">
+        <div class="col-12 col-md-4 offset-md-4 col-lg-4 offset-lg-4" style="padding: 10px;">
+            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
+                <button class="btn" style="color:#fff;border: 1px solid #ffffff00;background-color: #ffffff00;border-radius: 100px;float: left;" onclick="capa(1)"><i class="zmdi zmdi-arrow-left"></i> Back</button>
+                <div class="col-12" style="padding-top: 40px;">
+                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
+                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
+                </div>
+                <button data="translate" dataTranslate="1_2" class="btn btn-primary" style="width: 100%;margin-bottom: 10px;" onclick="capa(102);initCards()">Use virtual cards</button>
+                <br>
+                Or 
+                <br>
+                <button data="translate" dataTranslate="1_2" class="btn btn-primary" style="width: 100%;margin-top: 10px;" onclick="capa(105)">Use your own cards</button>
+             </div>
+        </div>
+    </div>
+    <div class="container-fluid m-0 p-0 capa capa_102">
+        <div class="col-12 col-md-4 offset-md-4 col-lg-4 offset-lg-4" style="padding: 10px;">
+            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
+                <button class="btn" style="color:#fff;border: 1px solid #ffffff00;background-color: #ffffff00;border-radius: 100px;float: left;" onclick="capa(101)"><i class="zmdi zmdi-arrow-left"></i> Back</button>
+                <div class="col-12" style="padding-top: 40px;">
+                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
+                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
+                 </div>
+                <h3  data="translate" dataTranslate="2_1" class="text_font">Choose your cards (3)</h3>
+             </div>
+            <div class="card-container col-12 p-0"  style="padding: 0px 0px;display: none;min-height: 120px;">
+                <!-- Fin de repetición -->
+            </div>
+            <div class="col-12" id="chooseCard" data="translate" dataTranslate="2_2" style="padding: 20px 0px 0px 0px;text-align: center;display: none;min-height: 170px;">
+                Selected cards
+            </div>
+            <button class="btn btn-primary btn-getanswer" style="width: 100%;display: none;margin-bottom: 10px;" onclick="capa(3);consultCard(true)">Get your answer now</button>
+        </div>
+    </div>
+
+    <div class="container-fluid m-0 p-0 capa capa_103">
+        <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px;">
+            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
+                <div class="col-12" style="padding-top: 30px;">
+                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
+                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
+                </div>
+                <h3  data="translate" dataTranslate="2_1" class="text_font">Your fortune</h3>
+             </div>
+            <div class="col-12 text_font" id="reading" style="padding: 0px 15px;">
+                <!-- Fin de repetición -->
+            </div>
+            <button class="btn btn-primary" data="translate" dataTranslate="3_2" style="width: 100%;" onclick="capa(1);$('#name_form').val('');$('#question_form').val('');">Start again</button>
+        </div>
+    </div>
+
+    <div class="container-fluid m-0 p-0 capa capa_105">
+        <div class="col-12 col-md-4 offset-md-4 col-lg-4 offset-lg-4" style="padding: 10px;">
+            <div class="col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2" style="padding: 10px 0px;text-align: center;">
+                <button class="btn" style="color:#fff;border: 1px solid #ffffff00;background-color: #ffffff00;border-radius: 100px;float: left;" onclick="capa(101)"><i class="zmdi zmdi-arrow-left"></i> Back</button>
+                <div class="col-12" style="padding-top: 40px;">
+                <h1 class="logo">Tarot<b style="color: #ffffff;font-weight: 700;">GPT</b></h1>
+                <img class="levitar" src="https://cdni.iconscout.com/illustration/premium/thumb/fortune-teller-with-ball-illustration-download-in-svg-png-gif-file-formats--girl-female-woman-tellers-magic-balls-pack-people-illustrations-5475797.png" style="width:50%;margin-bottom: 10px;">
+                  </div>
+                <h3  data="translate" dataTranslate="2_1" class="text_font">Input your cards</h3>
+             </div>
+            <div class="card-input-container col-12 p-0"  style="padding: 0px 0px;">
+                <input type="text" class="form-control card-input" placeholder="Input your card here" style="margin-bottom: 10px;">
+            </div>
+            <button class="btn btn-primary btn-getanswer" style="width: 100%;background-color: #FFF;color:#9780C4;border: 1px solid #9780C4;margin-bottom: 10px;" onclick="addCard()">Add new card</button>
+            <button class="btn btn-primary btn-getanswer" style="width: 100%;margin-bottom: 10px;" onclick="capa(3);consultCard(false)">Get your answer now</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function initCards(){
+            $(".btn-getanswer").hide() 
+            total=40;
+            totalChoose=0;
+            cardsChoose=[]
+            $("#chooseCard").hide()
+            $("#chooseCard").html("")
+            $(".card-container").html("");
+            $(".card-container").show();
+            ancho=$(".card-container").width()
+            $(".card-container").append(`
+            <div class="card cardShape" data="0" onclick="move(this)"></div>
+            `)
+            anchoCard=$(".card").width()
+            separacion=(ancho-anchoCard)/(total-1);
+            for (let x = 1; x < (total); x++) {
+                $(".card-container").append(`
+                <div class="card cardShape" style="margin-left:0px" data="${x}" onclick="move(this)"></div>
+                `)
+            }
+            mezclarCartas(separacion)
+        }
+
+        function move(e){
+            if(totalChoose<3){
+            $(e).css("margin-top","20px")
+            totalChoose++;
+            cardsChoose.push($(e).attr('data'))
+            }
+            if(totalChoose==3){
+                setTimeout(() => {
+                    $(".card").css("margin-top","0px")
+                    cerrarMazo()
+                    setTimeout(() => {
+                       $(".card-container").hide();
+                       showCards();
+                    }, 500);
+                }, 500);
+                
+            }
+        }
+
+        async function showCards(){
+            $("#chooseCard").show()
+            $("#chooseCard").html("")
+            ancho=$("#chooseCard").width()/4
+            x=1;
+            setTimeout(() => {
+                $(".btn-getanswer").show() 
+            }, 1200);
+            cardsChoose.forEach(e => {
+                const fijar=x*ancho-40;
+                const imgPegar=cardsSuffles[e].img;
+                setTimeout(() => {
+                    $("#chooseCard").append(`
+                    <div class="card levitar" style="margin-left:${fijar}px;width:80px">
+                        <img src="static/cards/${imgPegar}" style="width:100%;border:3px solid #9780C4;border-radius:3px">
+                    </div>
+                `)
+                }, 300*x);
+                x++
+            });
+        }
+
+
+        async function mezclarCartas(separacion) {
+        x=0;ind=1;acc=0
+        $(".card").each(function(index) {
+            acc=(((((x-20)*(x-20)))*-1)+240)/30
+            console.log(x,ind,acc)
+            $(this).animate({
+                marginTop: 0,
+                marginLeft: separacion * x
+            }, 800); // Ajusta la velocidad de la animación aquí
+            
+            x++;
+
+        });
+        }
+
+        function cerrarMazo(){
+            $(".card").each(function(index) {
+                $(this).animate({
+                    marginLeft: 0
+                }, 100); // Ajusta la velocidad de la animación aquí
+            });
+        }
+
+        function sleep(timeout){
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(true)
+                }, timeout);
+            })
+        }
+
+        loadingTxt=[
+            'Analyzing your cards',
+            'Analyzing your questions',
+            'Understanding the situation',
+            'Reading your fortune'
+        ]
+
+        txtCapa=()=>{
+            loadingTxt.forEach( (e,i) => {
+                setTimeout(() => {
+                    $("#capa_0_txt").html(e+"..")
+                }, i*2000);
+            });
+        }
+        
+        function capa(i){
+            $(".capa").hide()
+            $(`.capa_${i}`).show()
+            if(i==0){$("#capa_0_txt").html("")}
+        }
+
+        
+        totalChoose=0;
+        cardsChoose=[];
+        cardsSuffles=[];
+        capa(1)
+
+        $(window).on("load",async()=>{
+        const response=await fetch('static/tarot-images.json');
+        const {cards}=await response.json()
+        cardsSuffles=[...cards]; 
+        })
+
+        function addCard() {
+            $(".card-input-container").append(`<input type="text" class="form-control card-input" placeholder="Input your card here" style="margin-bottom: 10px;">`)
+        }
+
+        function consultCard(virtual=true){
+            cards="";x=1;
+            if(virtual){
+                cardsChoose.forEach(e => {
+                cards+=x+")"+cardsSuffles[e].name+".";
+                x++;
+                });
+            }else{
+                $(".card-input").each(function(){
+                    cards+=x+")"+$(this).val()+".";
+                    x++;
+                })
+            }
+            question=$("#question_form").val()
+            name=$("#name_form").val()
+            capa(0)
+            txtCapa()
+            
+            console.log({name,cards,question})
+            var settings = {
+                "url": "/api/tarot",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({name,cards,question}),
+            };
+            console.log("Enviando")
+            $.ajax(settings).done(function (r) {
+                console.log(r)
+                if(r.error){
+                    alert("An error has happened, please try again.")
+                    capa(102)
+                    return;
+                }
+                if(virtual){
+                    readingResult=`
+                    <p><img src="static/cards/${cardsSuffles[cardsChoose[0]].img}" style="margin:5px;float:left;width:70px"> ${r.cards[0].meaning}</p>
+                    <p><img src="static/cards/${cardsSuffles[cardsChoose[1]].img}" style="margin:5px;float:left;width:70px"> ${r.cards[1].meaning}</p>
+                    <p><img src="static/cards/${cardsSuffles[cardsChoose[2]].img}" style="margin:5px;float:left;width:70px"> ${r.cards[2].meaning}</p>`
+                }else{
+                    readingResult=`
+                    <p>${r.cards[0].meaning}</p>
+                    <p>${r.cards[1].meaning}</p>
+                    <p>${r.cards[2].meaning}</p>`
+                    
+                }
+                $("#reading").html(`
+                <h1 style="text-align:center;color:#9780C4">What do your letters say?</h1>
+                    ${readingResult}
+                <h1 style="text-align:center;color:#9780C4">In summary..</h1>
+                <p>${r.resume}</p>
+                `)
+                capa(103)
+            })
+        }
+
+        
+        
+    </script>
+</body>
+</html>
